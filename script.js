@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const whatsappBtn = document.getElementById("whatsappBtn");
   const resetBtn = document.getElementById("resetBtn");
 
-  formulario.addEventListener("submit", function (e) {
+  formulario.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const nombre = document.getElementById("nombre").value.trim();
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const invitacionURL = `${baseUrl}invitacion.html?${params.toString()}`;
 
     qrCodeDiv.innerHTML = "";
-    new QRCode(qrCodeDiv, {
+    const qr = new QRCode(qrCodeDiv, {
       text: invitacionURL,
       width: 200,
       height: 200,
@@ -43,19 +43,28 @@ document.addEventListener("DOMContentLoaded", function () {
     const fechaFormateada = fecha.split("-").reverse().join("/");
     mensajeQR.textContent = `Esta invitación me la envía ${entregadoPor}, la cual consta de "${beneficios}" para la noche del ${fechaFormateada}.`;
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const canvas = qrCodeDiv.querySelector("canvas");
       if (canvas) {
-        const blob = dataURLtoBlob(canvas.toDataURL("image/png"));
-        const qrURL = URL.createObjectURL(blob);
+        const dataUrl = canvas.toDataURL("image/png");
 
-        // Asignar descarga
-        descargarQR.href = qrURL;
+        // Subir a Imgur
+        const imgurLink = await subirAImgur(dataUrl);
+        if (!imgurLink) {
+          alert("No se pudo subir el QR a Imgur.");
+          return;
+        }
 
-        // Mensaje con link temporal al QR
-        const mensajeWpp = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}.\n\nDescargá tu QR desde aquí y mostralo en puerta:\n${qrURL}`;
+        // Descargar directamente
+        const blob = dataURLtoBlob(dataUrl);
+        const tempUrl = URL.createObjectURL(blob);
+        descargarQR.href = tempUrl;
+
+        // Mensaje de WhatsApp
+        const mensajeWpp = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}.\n\nDescargá tu QR desde aquí y mostralo en puerta:\n${imgurLink}\n\n⚠️ Importante: descargá el QR antes de las 24 hs. El QR desaparecerá!`;
 
         whatsappBtn.href = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensajeWpp)}`;
+
         qrContainer.style.display = "block";
       }
     }, 500);
@@ -68,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
     mensajeQR.textContent = "";
   });
 
-  // Función para convertir base64 a Blob
   function dataURLtoBlob(dataurl) {
     const arr = dataurl.split(',');
     const mime = arr[0].match(/:(.*?);/)[1];
@@ -77,5 +85,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const u8arr = new Uint8Array(n);
     while (n--) u8arr[n] = bstr.charCodeAt(n);
     return new Blob([u8arr], { type: mime });
+  }
+
+  async function subirAImgur(base64Image) {
+    const clientId = "4b1a3546c844fbd"; // 👈 REEMPLAZAR
+    const response = await fetch("https://api.imgur.com/3/image", {
+      method: "POST",
+      headers: {
+        Authorization: `Client-ID ${clientId}`,
+        Accept: "application/json"
+      },
+      body: new URLSearchParams({
+        image: base64Image.split(",")[1],
+        type: "base64"
+      })
+    });
+
+    const data = await response.json();
+    return data.success ? data.data.link : null;
   }
 });
