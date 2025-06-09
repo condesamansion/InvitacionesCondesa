@@ -35,7 +35,8 @@ textarea {
   border: 1px solid #ccc;
 }
 
-button {
+button,
+.boton {
   width: 100%;
   padding: 12px;
   margin-top: 20px;
@@ -45,25 +46,28 @@ button {
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
 }
 
-button:hover {
+button:hover,
+.boton:hover {
   background: darkcyan;
+}
+
+button.secundario {
+  background: #e0e0e0;
+  color: #333;
+}
+
+button.secundario:hover {
+  background: #c0c0c0;
 }
 
 #qrContainer {
   text-align: center;
   margin-top: 20px;
-}
-
-#descargarQR {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: royalblue;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
 }
 
 #mensajeQR {
