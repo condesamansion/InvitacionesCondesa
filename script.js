@@ -1,25 +1,37 @@
 document.getElementById("generarBtn").addEventListener("click", () => {
   const nombre = encodeURIComponent(document.getElementById("nombre").value);
+  const entregado = encodeURIComponent(document.getElementById("entregado").value);
   const beneficio = encodeURIComponent(document.getElementById("beneficio").value);
   const notas = encodeURIComponent(document.getElementById("notas").value);
-  const fecha = encodeURIComponent(document.getElementById("fecha").value);
+  const fechaInput = document.getElementById("fecha").value;
   const wpp = document.getElementById("wpp").value;
 
-  if (!nombre || !beneficio || !wpp || !fecha) {
-    alert("Por favor, completá nombre, beneficios, fecha y número de WhatsApp.");
+  if (!nombre || !entregado || !beneficio || !wpp || !fechaInput) {
+    alert("Por favor, completá todos los campos requeridos.");
     return;
   }
 
-  // URL en GitHub Pages (reemplazá con tu URL real)
-  const base = "https://tuusuario.github.io/tu-repositorio/invitacion.html";
-  const fullURL = `${base}?nombre=${nombre}&beneficio=${beneficio}&notas=${notas}&fecha=${fecha}`;
+  // Formatear fecha como dd/mm/aa
+  const fechaObj = new Date(fechaInput);
+  const dd = String(fechaObj.getDate()).padStart(2, '0');
+  const mm = String(fechaObj.getMonth() + 1).padStart(2, '0');
+  const aa = String(fechaObj.getFullYear()).slice(-2);
+  const fechaFormateada = `${dd}/${mm}/${aa}`;
+  const fecha = encodeURIComponent(fechaFormateada);
+
+  const base = "https://condesamansion.github.io/InvitacionesCondesa/invitacion.html";
+  const fullURL = `${base}?nombre=${nombre}&beneficio=${beneficio}&notas=${notas}&fecha=${fecha}&entregado=${entregado}`;
 
   // Generar QR
   const qrDiv = document.getElementById("qrcode");
   qrDiv.innerHTML = "";
   new QRCode(qrDiv, fullURL);
 
-  // Enlace de WhatsApp
+  // Mensaje visible bajo el QR
+  const resumen = `Esta invitación me la envía ${decodeURIComponent(entregado)}, la cual consta de ${decodeURIComponent(beneficio)} para la noche del ${fechaFormateada}.`;
+  document.getElementById("mensajeResumen").textContent = resumen;
+
+  // WhatsApp
   const mensaje = `Hola! Esta es tu invitación para Condesa 👑\n${fullURL}`;
   const waLink = `https://wa.me/54${wpp}?text=${encodeURIComponent(mensaje)}`;
 
@@ -31,12 +43,14 @@ document.getElementById("generarBtn").addEventListener("click", () => {
 
 document.getElementById("nuevoBtn").addEventListener("click", () => {
   document.getElementById("nombre").value = "";
+  document.getElementById("entregado").value = "";
   document.getElementById("beneficio").value = "";
   document.getElementById("notas").value = "";
   document.getElementById("fecha").value = "";
   document.getElementById("wpp").value = "";
 
   document.getElementById("qrcode").innerHTML = "";
+  document.getElementById("mensajeResumen").textContent = "";
   const linkEl = document.getElementById("waLink");
   linkEl.href = "#";
   linkEl.textContent = "";
