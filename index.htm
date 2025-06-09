@@ -14,6 +14,10 @@
       <input type="text" id="nombre" />
     </label>
 
+    <label>Entregado por:
+      <input type="text" id="entregado" />
+    </label>
+
     <label>Beneficios:
       <textarea id="beneficio" rows="5"></textarea>
     </label>
@@ -22,8 +26,8 @@
       <input type="text" id="notas" />
     </label>
 
-    <label>Fecha del evento:
-      <input type="text" id="fecha" placeholder="Ej: Sábado 15/06 - 23:00 hs" />
+    <label>Fecha:
+      <input type="date" id="fecha" />
     </label>
 
     <label>Número de WhatsApp (sin 0 ni 15):
@@ -35,6 +39,7 @@
 
     <div id="resultado">
       <div id="qrcode"></div>
+      <div id="mensajeResumen"></div>
       <a id="waLink" href="#" target="_blank" style="display: none;">Enviar por WhatsApp</a>
     </div>
   </div>
