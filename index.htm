@@ -19,13 +19,8 @@
     </label>
 
     <label>Fecha del evento:
-      <select id="fecha">
-        <option value="">Selecciona una fecha</option>
-        <option value="25/12/24">25/12/24 - Nochebuena</option>
-        <option value="31/12/24">31/12/24 - Año Nuevo</option>
-        <option value="14/02/25">14/02/25 - San Valentín</option>
-        <!-- Agregar más fechas relevantes para tu bar -->
-      </select>
+      <input type="date" id="fechaInput" />
+      <input type="hidden" id="fecha" /> <!-- Almacenará el formato dd/mm/aa -->
     </label>
 
     <label>Beneficios:
