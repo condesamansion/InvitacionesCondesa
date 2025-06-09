@@ -33,10 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const baseUrl = `${window.location.origin}${window.location.pathname.replace("index.html", "")}`;
     const invitacionURL = `${baseUrl}invitacion.html?${params.toString()}`;
 
-    // Limpiar QR anterior
     qrCodeDiv.innerHTML = "";
-
-    // Generar QR
     new QRCode(qrCodeDiv, {
       text: invitacionURL,
       width: 200,
@@ -49,15 +46,16 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => {
       const canvas = qrCodeDiv.querySelector("canvas");
       if (canvas) {
-        const qrImage = canvas.toDataURL("image/png");
-        descargarQR.href = qrImage;
+        const blob = dataURLtoBlob(canvas.toDataURL("image/png"));
+        const qrURL = URL.createObjectURL(blob);
 
-        // Generar mensaje de WhatsApp sin el link de invitación
-        const mensajeWpp = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}. Descargá tu QR para mostrarlo en puerta:\n`;
+        // Asignar descarga
+        descargarQR.href = qrURL;
 
-        // Substituir por un link temporal que descargue la imagen
-        whatsappBtn.href = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensajeWpp)}&app_absent=0`;
-        whatsappBtn.style.display = "inline-block";
+        // Mensaje con link temporal al QR
+        const mensajeWpp = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}.\n\nDescargá tu QR desde aquí y mostralo en puerta:\n${qrURL}`;
+
+        whatsappBtn.href = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensajeWpp)}`;
         qrContainer.style.display = "block";
       }
     }, 500);
@@ -69,4 +67,15 @@ document.addEventListener("DOMContentLoaded", function () {
     qrCodeDiv.innerHTML = "";
     mensajeQR.textContent = "";
   });
+
+  // Función para convertir base64 a Blob
+  function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) u8arr[n] = bstr.charCodeAt(n);
+    return new Blob([u8arr], { type: mime });
+  }
 });
