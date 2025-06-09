@@ -1,58 +1,55 @@
 document.getElementById("generarBtn").addEventListener("click", () => {
-  const nombre = encodeURIComponent(document.getElementById("nombre").value);
-  const entregado = encodeURIComponent(document.getElementById("entregado").value);
-  const beneficio = encodeURIComponent(document.getElementById("beneficio").value);
-  const notas = encodeURIComponent(document.getElementById("notas").value);
+  const nombre = document.getElementById("nombre").value.trim();
+  const beneficio = document.getElementById("beneficio").value.trim();
+  const notas = document.getElementById("notas").value.trim();
   const fechaInput = document.getElementById("fecha").value;
-  const wpp = document.getElementById("wpp").value;
+  const entregado = document.getElementById("entregado").value.trim();
 
-  if (!nombre || !entregado || !beneficio || !wpp || !fechaInput) {
-    alert("Por favor, completá todos los campos requeridos.");
+  if (!nombre || !beneficio || !fechaInput || !entregado) {
+    alert("Por favor, completá todos los campos obligatorios.");
     return;
   }
 
-  // Formatear fecha como dd/mm/aa
-  const fechaObj = new Date(fechaInput);
-  const dd = String(fechaObj.getDate()).padStart(2, '0');
-  const mm = String(fechaObj.getMonth() + 1).padStart(2, '0');
-  const aa = String(fechaObj.getFullYear()).slice(-2);
-  const fechaFormateada = `${dd}/${mm}/${aa}`;
-  const fecha = encodeURIComponent(fechaFormateada);
+  const [yyyy, mm, dd] = fechaInput.split("-");
+  const fecha = `${dd}/${mm}/${yyyy.slice(2)}`; // formato dd/mm/aa
 
-  const base = "https://condesamansion.github.io/InvitacionesCondesa/invitacion.html";
-  const fullURL = `${base}?nombre=${nombre}&beneficio=${beneficio}&notas=${notas}&fecha=${fecha}&entregado=${entregado}`;
+  const mensajeQR = `🎫 INVITACIÓN CONDESA\n\n📛 Nombre: ${nombre}\n🎁 Beneficio: ${beneficio}\n📅 Fecha: ${fecha}\n📝 Notas: ${notas}\n👤 Entregado por: ${entregado}`;
 
-  // Generar QR
+  // Limpiar QR anterior
   const qrDiv = document.getElementById("qrcode");
   qrDiv.innerHTML = "";
-  new QRCode(qrDiv, fullURL);
 
-  // Mensaje visible bajo el QR
-  const resumen = `Esta invitación me la envía ${decodeURIComponent(entregado)}, la cual consta de ${decodeURIComponent(beneficio)} para la noche del ${fechaFormateada}.`;
-  document.getElementById("mensajeResumen").textContent = resumen;
+  const qr = new QRCode(qrDiv, {
+    text: mensajeQR,
+    width: 256,
+    height: 256,
+  });
 
-  // WhatsApp
-  const mensaje = `Hola! Esta es tu invitación para Condesa 👑\n${fullURL}`;
-  const waLink = `https://wa.me/54${wpp}?text=${encodeURIComponent(mensaje)}`;
+  // Mostrar descripción debajo del QR
+  document.getElementById("descripcionQR").textContent = `Esta invitación me la envía ${entregado}, la cual consta de ${beneficio} para la noche del ${fecha}.`;
 
-  const linkEl = document.getElementById("waLink");
-  linkEl.href = waLink;
-  linkEl.textContent = "Enviar invitación por WhatsApp ➜";
-  linkEl.style.display = "inline-block";
+  // Esperar a que el QR esté generado para convertirlo en imagen
+  setTimeout(() => {
+    const qrImg = qrDiv.querySelector("img") || qrDiv.querySelector("canvas");
+    if (qrImg) {
+      const dataURL = qrImg.toDataURL ? qrImg.toDataURL("image/png") : qrImg.src;
+      const link = document.getElementById("descargarQR");
+      link.href = dataURL;
+      link.style.display = "inline-block";
+    }
+  }, 500);
 });
 
 document.getElementById("nuevoBtn").addEventListener("click", () => {
   document.getElementById("nombre").value = "";
-  document.getElementById("entregado").value = "";
   document.getElementById("beneficio").value = "";
   document.getElementById("notas").value = "";
   document.getElementById("fecha").value = "";
-  document.getElementById("wpp").value = "";
+  document.getElementById("entregado").value = "";
 
   document.getElementById("qrcode").innerHTML = "";
-  document.getElementById("mensajeResumen").textContent = "";
-  const linkEl = document.getElementById("waLink");
-  linkEl.href = "#";
-  linkEl.textContent = "";
-  linkEl.style.display = "none";
+  document.getElementById("descripcionQR").textContent = "";
+  const link = document.getElementById("descargarQR");
+  link.href = "#";
+  link.style.display = "none";
 });
