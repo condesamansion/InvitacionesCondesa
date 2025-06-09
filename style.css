@@ -66,18 +66,19 @@ button.secundario:hover {
   text-align: center;
 }
 
-#waLink {
+#descripcionQR {
+  margin-top: 15px;
+  font-size: 16px;
+  font-style: italic;
+  color: #444;
+}
+
+#descargarQR {
   display: inline-block;
   margin-top: 15px;
   padding: 8px 12px;
-  background-color: #25D366;
+  background-color: #007bff;
   color: white;
   text-decoration: none;
   border-radius: 5px;
-}
-
-#mensajeResumen {
-  margin-top: 15px;
-  font-style: italic;
-  color: #444;
 }
