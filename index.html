@@ -2,40 +2,36 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Generador de Invitaciones</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Generador de QR para Invitación</h1>
+    <h1>Generador de Invitaciones</h1>
+    <form id="formulario">
+      <label for="nombre">Destinatario:</label>
+      <input type="text" id="nombre" name="nombre" required />
 
-    <label>Nombre del destinatario:
-      <input type="text" id="nombre" />
-    </label>
+      <label for="entregadoPor">Entregado por:</label>
+      <input type="text" id="entregadoPor" name="entregadoPor" required />
 
-    <label>Entregado por:
-      <input type="text" id="entregado" />
-    </label>
+      <label for="beneficios">Beneficios:</label>
+      <textarea id="beneficios" name="beneficios" required></textarea>
 
-    <label>Beneficios:
-      <textarea id="beneficio" rows="5"></textarea>
-    </label>
+      <label for="notas">Notas (solo visible para portero):</label>
+      <input type="text" id="notas" name="notas" />
 
-    <label>Notas (solo visible para portero):
-      <input type="text" id="notas" />
-    </label>
+      <label for="fecha">Fecha:</label>
+      <input type="date" id="fecha" name="fecha" required />
 
-    <label>Fecha:
-      <input type="date" id="fecha" />
-    </label>
+      <button type="submit">Generar QR</button>
+      <button type="button" id="resetBtn">Nuevo QR</button>
+    </form>
 
-    <button id="generarBtn">Generar QR</button>
-    <button id="nuevoBtn" class="secundario">Nuevo QR</button>
-
-    <div id="resultado">
+    <div id="qrContainer" style="display: none;">
       <div id="qrcode"></div>
-      <p id="descripcionQR"></p>
+      <p id="mensajeQR"></p>
       <a id="descargarQR" href="#" download="invitacion.png">Descargar QR</a>
     </div>
   </div>
