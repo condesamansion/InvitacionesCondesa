@@ -7,7 +7,14 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="login">
+    <h2>Acceso para portero</h2>
+    <p>Ingresa la contraseña:</p>
+    <input type="password" id="clave" placeholder="Contraseña" />
+    <button onclick="verificarClave()">Ingresar</button>
+  </div>
+
+  <div class="container" id="contenido" style="display: none;">
     <h1>Invitación</h1>
     <p><strong>Destinatario:</strong> <span id="nombre"></span></p>
     <p><strong>Entregado por:</strong> <span id="entregadoPor"></span></p>
@@ -17,13 +24,25 @@
   </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
+    function verificarClave() {
+      const clave = document.getElementById("clave").value;
+      if (clave === "123") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("contenido").style.display = "block";
+        mostrarDatos();
+      } else {
+        alert("Contraseña incorrecta");
+      }
+    }
 
-    document.getElementById("nombre").textContent = params.get("nombre") || "";
-    document.getElementById("entregadoPor").textContent = params.get("entregadoPor") || "";
-    document.getElementById("beneficios").textContent = params.get("beneficios") || "";
-    document.getElementById("fecha").textContent = params.get("fecha")?.split("-").reverse().join("/") || "";
-    document.getElementById("notas").textContent = params.get("notas") || "";
+    function mostrarDatos() {
+      const params = new URLSearchParams(window.location.search);
+      document.getElementById("nombre").textContent = params.get("nombre") || "";
+      document.getElementById("entregadoPor").textContent = params.get("entregadoPor") || "";
+      document.getElementById("beneficios").textContent = params.get("beneficios") || "";
+      document.getElementById("fecha").textContent = params.get("fecha")?.split("-").reverse().join("/") || "";
+      document.getElementById("notas").textContent = params.get("notas") || "";
+    }
   </script>
 </body>
 </html>
