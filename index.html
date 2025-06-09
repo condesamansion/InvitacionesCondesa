@@ -25,6 +25,9 @@
       <label for="fecha">Fecha:</label>
       <input type="date" id="fecha" name="fecha" required />
 
+      <label for="telefono">Teléfono (sin 0 ni 15):</label>
+      <input type="text" id="telefono" name="telefono" required placeholder="Ej: 358123456" />
+
       <button type="submit">Generar QR</button>
       <button type="button" id="resetBtn">Nuevo QR</button>
     </form>
@@ -33,10 +36,10 @@
       <div id="qrcode"></div>
       <p id="mensajeQR"></p>
       <a id="descargarQR" href="#" download="invitacion.png">Descargar QR</a>
+      <a id="whatsappBtn" href="#" target="_blank">Enviar por WhatsApp</a>
     </div>
   </div>
 
-  <!-- IMPORTANTE: colocar el script aquí al final -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="script.js"></script>
 </body>
