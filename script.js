@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const qrCodeDiv = document.getElementById("qrcode");
   const mensajeQR = document.getElementById("mensajeQR");
   const descargarQR = document.getElementById("descargarQR");
+  const whatsappBtn = document.getElementById("whatsappBtn");
   const resetBtn = document.getElementById("resetBtn");
 
   formulario.addEventListener("submit", function (e) {
@@ -14,9 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const beneficios = document.getElementById("beneficios").value.trim();
     const notas = document.getElementById("notas").value.trim();
     const fecha = document.getElementById("fecha").value;
+    const telefono = document.getElementById("telefono").value.trim();
 
-    if (!nombre || !entregadoPor || !beneficios || !fecha) {
-      alert("Por favor, completa todos los campos obligatorios.");
+    if (!nombre || !entregadoPor || !beneficios || !fecha || !telefono) {
+      alert("Por favor, completa todos los campos.");
       return;
     }
 
@@ -29,28 +31,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const baseUrl = `${window.location.origin}${window.location.pathname.replace("index.html", "")}`;
-    const link = `${baseUrl}invitacion.html?${params.toString()}`;
+    const invitacionURL = `${baseUrl}invitacion.html?${params.toString()}`;
 
     // Limpiar QR anterior
     qrCodeDiv.innerHTML = "";
 
     // Generar QR
     new QRCode(qrCodeDiv, {
-      text: link,
+      text: invitacionURL,
       width: 200,
       height: 200,
     });
 
-    // Mostrar mensaje personalizado
-    const fechaFormato = fecha.split("-").reverse().join("/");
-    mensajeQR.textContent = `Esta invitación me la envía ${entregadoPor}, la cual consta de "${beneficios}" para la noche del ${fechaFormato}.`;
+    const fechaFormateada = fecha.split("-").reverse().join("/");
+    mensajeQR.textContent = `Esta invitación me la envía ${entregadoPor}, la cual consta de "${beneficios}" para la noche del ${fechaFormateada}.`;
 
-    // Descargar como imagen después de un pequeño delay
     setTimeout(() => {
       const canvas = qrCodeDiv.querySelector("canvas");
       if (canvas) {
-        const url = canvas.toDataURL("image/png");
-        descargarQR.href = url;
+        const qrImage = canvas.toDataURL("image/png");
+        descargarQR.href = qrImage;
+
+        // Generar mensaje de WhatsApp sin el link de invitación
+        const mensajeWpp = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}. Descargá tu QR para mostrarlo en puerta:\n`;
+
+        // Substituir por un link temporal que descargue la imagen
+        whatsappBtn.href = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensajeWpp)}&app_absent=0`;
+        whatsappBtn.style.display = "inline-block";
         qrContainer.style.display = "block";
       }
     }, 500);
