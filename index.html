@@ -30,17 +30,13 @@
       <input type="date" id="fecha" />
     </label>
 
-    <label>Número de WhatsApp (sin 0 ni 15):
-      <input type="text" id="wpp" placeholder="Ej: 3584123456" />
-    </label>
-
     <button id="generarBtn">Generar QR</button>
     <button id="nuevoBtn" class="secundario">Nuevo QR</button>
 
     <div id="resultado">
       <div id="qrcode"></div>
-      <div id="mensajeResumen"></div>
-      <a id="waLink" href="#" target="_blank" style="display: none;">Enviar por WhatsApp</a>
+      <p id="descripcionQR"></p>
+      <a id="descargarQR" href="#" download="invitacion.png">Descargar QR</a>
     </div>
   </div>
 
