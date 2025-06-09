@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Invitaciones</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Generador de QR para Invitación</h1>
+
+    <label>Nombre del destinatario:
+      <input type="text" id="nombre" />
+    </label>
+
+    <label>Entregado por:
+      <input type="text" id="vendedor" placeholder="Ej: Juan Pérez" />
+    </label>
+
+    <label>Fecha del evento (dd/mm/aa):
+      <input type="text" id="fecha" placeholder="Ej: 25/12/24" />
+    </label>
+
+    <label>Beneficios:
+      <textarea id="beneficio" rows="5"></textarea>
+    </label>
+
+    <label>Notas (solo visible para portero):
+      <input type="text" id="notas" />
+    </label>
+
+    <label>Número de WhatsApp (sin 0 ni 15):
+      <input type="text" id="wpp" placeholder="Ej: 3584123456" />
+    </label>
+
+    <button id="generarBtn">Generar QR</button>
+    <button id="nuevoBtn" class="secundario">Nuevo QR</button>
+
+    <div id="resultado">
+      <div id="qrcode"></div>
+      <p id="qrMensaje"></p>
+      <a id="waLink" href="#" target="_blank">Enviar por WhatsApp</a>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
