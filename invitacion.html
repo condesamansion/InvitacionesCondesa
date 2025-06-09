@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invitación</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🎫 Invitación Personalizada</h1>
+    <div><strong>Nombre:</strong> <span id="outNombre"></span></div>
+    <div><strong>Entregado por:</strong> <span id="outVendedor"></span></div>
+    <div><strong>Fecha:</strong> <span id="outFecha"></span></div>
+    <div><strong>Beneficios:</strong><pre id="outBeneficio"></pre></div>
+    <div><strong>Notas para el ingreso:</strong> <span id="outNotas"></span></div>
+  </div>
+
+  <script>
+    const p = new URLSearchParams(window.location.search);
+    document.getElementById("outNombre").textContent = p.get("nombre") || "";
+    document.getElementById("outVendedor").textContent = p.get("vendedor") || "";
+    document.getElementById("outBeneficio").textContent = p.get("beneficio") || "";
+    document.getElementById("outNotas").textContent = p.get("notas") || "";
+    document.getElementById("outFecha").textContent = p.get("fecha") || "";
+  </script>
+</body>
+</html>
