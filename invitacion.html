@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Invitación</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🎫 Invitación VIP</h1>
-    <div class="invitacion-datos">
-      <div><strong>Nombre:</strong> <span id="outNombre"></span></div>
-      <div><strong>Entregado por:</strong> <span id="outVendedor"></span></div>
-      <div><strong>Fecha:</strong> <span id="outFecha"></span></div>
-      <div><strong>Beneficios:</strong> <div id="outBeneficio"></div></div>
-      <div><strong>Notas:</strong> <span id="outNotas"></span></div>
-    </div>
+    <h1>🎫 Invitación Personalizada</h1>
+    <div><strong>Nombre:</strong> <span id="outNombre"></span></div>
+    <div><strong>Fecha:</strong> <span id="outFecha"></span></div>
+    <div><strong>Beneficios:</strong><pre id="outBeneficio"></pre></div>
+    <div><strong>Notas para el ingreso:</strong> <span id="outNotas"></span></div>
+    <div><strong>Entregado por:</strong> <span id="outEntregado"></span></div>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const params = new URLSearchParams(window.location.search);
-      
-      document.getElementById('outNombre').textContent = params.get('nombre') || 'No especificado';
-      document.getElementById('outVendedor').textContent = params.get('vendedor') || 'No especificado';
-      document.getElementById('outBeneficio').textContent = params.get('beneficio') || 'No especificado';
-      document.getElementById('outNotas').textContent = params.get('notas') || 'No hay notas';
-      document.getElementById('outFecha').textContent = params.get('fecha') || 'No especificada';
-    });
+    const p = new URLSearchParams(window.location.search);
+    document.getElementById("outNombre").textContent = p.get("nombre") || "";
+    document.getElementById("outBeneficio").textContent = p.get("beneficio") || "";
+    document.getElementById("outNotas").textContent = p.get("notas") || "";
+    document.getElementById("outFecha").textContent = p.get("fecha") || "";
+    document.getElementById("outEntregado").textContent = p.get("entregado") || "";
   </script>
 </body>
 </html>
