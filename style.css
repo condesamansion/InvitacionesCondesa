@@ -26,6 +26,7 @@ label {
 }
 
 input[type="text"],
+input[type="date"],
 textarea {
   width: 100%;
   padding: 8px;
@@ -73,4 +74,10 @@ button.secundario:hover {
   color: white;
   text-decoration: none;
   border-radius: 5px;
+}
+
+#mensajeResumen {
+  margin-top: 15px;
+  font-style: italic;
+  color: #444;
 }
