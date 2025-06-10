@@ -21,34 +21,37 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const params = new URLSearchParams({
-      nombre,
-      entregadoPor,
-      beneficios,
-      notas,
-      fecha
-    });
-
+    const params = new URLSearchParams({ nombre, entregadoPor, beneficios, notas, fecha });
     const baseUrl = `${window.location.origin}${window.location.pathname.replace("index.html", "")}`;
     const urlQR = `${baseUrl}invitacion.html?${params.toString()}`;
 
-    // Crear QR en canvas oculto
-    const qrTempDiv = document.createElement("div");
-    const qr = new QRCode(qrTempDiv, {
-      text: urlQR,
+    const qrCode = new QRCodeStyling({
       width: 596,
       height: 596,
-      correctLevel: QRCode.CorrectLevel.H
+      type: "canvas",
+      data: urlQR,
+      image: "img/logo.png",
+      dotsOptions: {
+        color: "#000000",
+        type: "dots"
+      },
+      imageOptions: {
+        crossOrigin: "anonymous",
+        margin: 10,
+        imageSize: 0.2
+      }
     });
 
+    const tempDiv = document.createElement("div");
+    qrCode.append(tempDiv);
+
     setTimeout(async () => {
-      const qrCanvas = qrTempDiv.querySelector("canvas");
+      const canvasQR = tempDiv.querySelector("canvas");
       const qrImage = new Image();
-      qrImage.src = qrCanvas.toDataURL("image/jpg");
+      qrImage.src = canvasQR.toDataURL("image/png");
 
       qrImage.onload = async () => {
         const ctx = canvasFinal.getContext("2d");
-
         const fondo = new Image();
         fondo.src = "img/fondo.jpg";
 
@@ -59,16 +62,15 @@ document.addEventListener("DOMContentLoaded", function () {
           ctx.font = "900 54px Montserrat";
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
-          ctx.fillText(nombre.toUpperCase(), 899 / 2, 470);
+          ctx.fillText(nombre.toUpperCase(), 899 / 2, 532);
 
           ctx.drawImage(qrImage, 152, 557, 596, 596);
 
-          const dataUrl = canvasFinal.toDataURL("image/jpg");
+          const dataUrl = canvasFinal.toDataURL("image/jpeg");
           const blob = dataURLtoBlob(dataUrl);
           const tempUrl = URL.createObjectURL(blob);
           descargarQR.href = tempUrl;
 
-          // Subir a Imgur
           const imgurLink = await subirAImgur(dataUrl);
           if (!imgurLink) {
             alert("No se pudo subir la imagen a Imgur.");
@@ -82,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
           qrContainer.style.display = "block";
         };
       };
-    }, 500);
+    }, 800);
   });
 
   resetBtn.addEventListener("click", () => {
@@ -103,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function subirAImgur(base64Image) {
-    const clientId = "4b1a3546c844fbd"; // Reemplazar por tu Client ID
+    const clientId = "4b1a3546c844fbd"; // Reemplazar con tu Client-ID
     const response = await fetch("https://api.imgur.com/3/image", {
       method: "POST",
       headers: {
