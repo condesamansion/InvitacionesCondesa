@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Generador de Invitaciones</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="img/logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="img/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="container">
@@ -36,12 +36,13 @@
 
     <div id="qrContainer" style="display: none;">
       <canvas id="canvasFinal" width="899" height="1274"></canvas>
-      <p id="mensajeQR"></p>
+      <p id="mensajeQR">⚠️ Importante: descargá el QR antes de las 24 hs. El QR desaparecerá!</p>
       <a id="descargarQR" class="boton" href="#" download="invitacion.jpg">Descargar QR</a>
       <a id="whatsappBtn" class="boton" href="#" target="_blank">Enviar por WhatsApp</a>
     </div>
   </div>
 
+  <!-- Librería QR moderna -->
   <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
   <script src="script.js"></script>
 </body>
