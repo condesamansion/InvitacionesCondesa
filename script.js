@@ -25,66 +25,71 @@ document.addEventListener("DOMContentLoaded", function () {
     const baseUrl = `${window.location.origin}${window.location.pathname.replace("index.html", "")}`;
     const urlQR = `${baseUrl}invitacion.html?${params.toString()}`;
 
-    const qrCode = new QRCodeStyling({
+    // Crear QR con estilo
+    const qr = new QRCodeStyling({
       width: 596,
       height: 596,
       type: "canvas",
       data: urlQR,
       image: "img/logo.png",
-      dotsOptions: {
-        color: "#000000",
-        type: "dots"
-      },
       imageOptions: {
         crossOrigin: "anonymous",
-        margin: 10,
-        imageSize: 0.2
+        width: 60,
+        height: 60
+      },
+      dotsOptions: {
+        type: "dots",
+        color: "#000000"
+      },
+      backgroundOptions: {
+        color: "#ffffff"
       }
     });
 
-    const tempDiv = document.createElement("div");
-    qrCode.append(tempDiv);
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = 596;
+    tempCanvas.height = 596;
 
-    setTimeout(async () => {
-      const canvasQR = tempDiv.querySelector("canvas");
-      const qrImage = new Image();
-      qrImage.src = canvasQR.toDataURL("image/png");
+    await qr.append(tempCanvas);
+    const qrDataUrl = tempCanvas.toDataURL("image/png");
 
-      qrImage.onload = async () => {
-        const ctx = canvasFinal.getContext("2d");
-        const fondo = new Image();
-        fondo.src = "img/fondo.jpg";
+    const fondo = new Image();
+    fondo.src = "img/fondo.jpg";
 
-        fondo.onload = async () => {
-          ctx.clearRect(0, 0, canvasFinal.width, canvasFinal.height);
-          ctx.drawImage(fondo, 0, 0, 899, 1274);
+    fondo.onload = async () => {
+      const ctx = canvasFinal.getContext("2d");
+      ctx.clearRect(0, 0, canvasFinal.width, canvasFinal.height);
+      ctx.drawImage(fondo, 0, 0, 899, 1274);
 
-          ctx.font = "900 54px Montserrat";
-          ctx.fillStyle = "white";
-          ctx.textAlign = "center";
-          ctx.fillText(nombre.toUpperCase(), 899 / 2, 532);
+      const nombreFinal = nombre.toUpperCase();
+      ctx.font = "900 54px 'Montserrat'";
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+      ctx.fillText(nombreFinal, 899 / 2, 532);
 
-          ctx.drawImage(qrImage, 152, 557, 596, 596);
+      const qrImg = new Image();
+      qrImg.src = qrDataUrl;
+      qrImg.onload = async () => {
+        ctx.drawImage(qrImg, 151, 582, 596, 596);
 
-          const dataUrl = canvasFinal.toDataURL("image/jpeg");
-          const blob = dataURLtoBlob(dataUrl);
-          const tempUrl = URL.createObjectURL(blob);
-          descargarQR.href = tempUrl;
+        const dataUrl = canvasFinal.toDataURL("image/jpg");
+        const blob = dataURLtoBlob(dataUrl);
+        const tempUrl = URL.createObjectURL(blob);
+        descargarQR.href = tempUrl;
 
-          const imgurLink = await subirAImgur(dataUrl);
-          if (!imgurLink) {
-            alert("No se pudo subir la imagen a Imgur.");
-            return;
-          }
+        const imgurLink = await subirAImgur(dataUrl);
+        if (!imgurLink) {
+          alert("No se pudo subir a Imgur");
+          return;
+        }
 
-          const fechaFormateada = fecha.split("-").reverse().join("/");
-          const mensaje = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}.\n\nDescargá tu QR desde aquí y mostralo en puerta:\n${imgurLink}\n\n⚠️ Importante: descargá el QR antes de las 24 hs. El QR desaparecerá!`;
+        const fechaFormateada = fecha.split("-").reverse().join("/");
+        const mensaje = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}.\n\nDescargá tu QR desde aquí y mostralo en puerta:\n${imgurLink}\n\n⚠️ Importante: descargá el QR antes de las 24 hs. El QR desaparecerá!`;
 
-          whatsappBtn.href = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensaje)}`;
-          qrContainer.style.display = "block";
-        };
+        whatsappBtn.href = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensaje)}`;
+        qrContainer.style.display = "block";
       };
-    }, 800);
+    };
   });
 
   resetBtn.addEventListener("click", () => {
@@ -105,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function subirAImgur(base64Image) {
-    const clientId = "4b1a3546c844fbd"; // Reemplazar con tu Client-ID
+    const clientId = "4b1a3546c844fbd";
     const response = await fetch("https://api.imgur.com/3/image", {
       method: "POST",
       headers: {
