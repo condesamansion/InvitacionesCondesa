@@ -5,36 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Generador de Invitaciones</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <h1>Generador de Invitaciones</h1>
     <form id="formulario">
       <label for="nombre">Destinatario:</label>
-      <input type="text" id="nombre" name="nombre" required />
+      <input type="text" id="nombre" required />
 
       <label for="entregadoPor">Entregado por:</label>
-      <input type="text" id="entregadoPor" name="entregadoPor" required />
+      <input type="text" id="entregadoPor" required />
 
       <label for="beneficios">Beneficios:</label>
-      <textarea id="beneficios" name="beneficios" required></textarea>
+      <textarea id="beneficios" required></textarea>
 
       <label for="notas">Notas (solo visible para portero):</label>
-      <input type="text" id="notas" name="notas" />
+      <input type="text" id="notas" />
 
       <label for="fecha">Fecha:</label>
-      <input type="date" id="fecha" name="fecha" required />
+      <input type="date" id="fecha" required />
 
       <label for="telefono">Teléfono (sin 0 ni 15):</label>
-      <input type="text" id="telefono" name="telefono" required placeholder="Ej: 358123456" />
+      <input type="text" id="telefono" required placeholder="Ej: 358123456" />
 
       <button type="submit">Generar QR</button>
       <button type="button" id="resetBtn" class="secundario">Nuevo QR</button>
     </form>
 
     <div id="qrContainer" style="display: none;">
-      <div id="qrcode"></div>
-      <p id="mensajeQR"></p>
+      <canvas id="canvasFinal" width="899" height="1274"></canvas>
       <a id="descargarQR" class="boton" href="#" download="invitacion.png">Descargar QR</a>
       <a id="whatsappBtn" class="boton" href="#" target="_blank">Enviar por WhatsApp</a>
     </div>
