@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: #f4f4f4;
@@ -21,7 +23,7 @@ h1 {
 }
 
 label {
-  font-weight: 700;
+  font-weight: bold;
   display: block;
   margin-top: 15px;
 }
@@ -51,6 +53,7 @@ button,
   text-align: center;
   display: inline-block;
   text-decoration: none;
+  font-weight: 700;
 }
 
 button:hover,
@@ -70,4 +73,19 @@ button.secundario:hover {
 #qrContainer {
   text-align: center;
   margin-top: 20px;
+}
+
+#canvasFinal {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: auto;
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+#mensajeQR {
+  font-style: italic;
+  margin-top: 10px;
 }
