@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const formulario = document.getElementById("formulario");
   const qrContainer = document.getElementById("qrContainer");
-  const qrCodeDiv = document.getElementById("qrcode");
-  const mensajeQR = document.getElementById("mensajeQR");
+  const canvasFinal = document.getElementById("canvasFinal");
   const descargarQR = document.getElementById("descargarQR");
   const whatsappBtn = document.getElementById("whatsappBtn");
   const resetBtn = document.getElementById("resetBtn");
@@ -18,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const telefono = document.getElementById("telefono").value.trim();
 
     if (!nombre || !entregadoPor || !beneficios || !fecha || !telefono) {
-      alert("Por favor, completa todos los campos.");
+      alert("Por favor, completá todos los campos obligatorios.");
       return;
     }
 
@@ -27,54 +26,70 @@ document.addEventListener("DOMContentLoaded", function () {
       entregadoPor,
       beneficios,
       notas,
-      fecha,
+      fecha
     });
 
     const baseUrl = `${window.location.origin}${window.location.pathname.replace("index.html", "")}`;
-    const invitacionURL = `${baseUrl}invitacion.html?${params.toString()}`;
+    const urlQR = `${baseUrl}invitacion.html?${params.toString()}`;
 
-    qrCodeDiv.innerHTML = "";
-    const qr = new QRCode(qrCodeDiv, {
-      text: invitacionURL,
-      width: 200,
-      height: 200,
+    // Crear QR en canvas oculto
+    const qrTempDiv = document.createElement("div");
+    const qr = new QRCode(qrTempDiv, {
+      text: urlQR,
+      width: 596,
+      height: 596,
+      correctLevel: QRCode.CorrectLevel.H
     });
 
-    const fechaFormateada = fecha.split("-").reverse().join("/");
-    mensajeQR.textContent = `Esta invitación me la envía ${entregadoPor}, la cual consta de "${beneficios}" para la noche del ${fechaFormateada}.`;
-
     setTimeout(async () => {
-      const canvas = qrCodeDiv.querySelector("canvas");
-      if (canvas) {
-        const dataUrl = canvas.toDataURL("image/png");
+      const qrCanvas = qrTempDiv.querySelector("canvas");
+      const qrImage = new Image();
+      qrImage.src = qrCanvas.toDataURL("image/png");
 
-        // Subir a Imgur
-        const imgurLink = await subirAImgur(dataUrl);
-        if (!imgurLink) {
-          alert("No se pudo subir el QR a Imgur.");
-          return;
-        }
+      qrImage.onload = async () => {
+        const ctx = canvasFinal.getContext("2d");
 
-        // Descargar directamente
-        const blob = dataURLtoBlob(dataUrl);
-        const tempUrl = URL.createObjectURL(blob);
-        descargarQR.href = tempUrl;
+        const fondo = new Image();
+        fondo.src = "img/fondo.png";
 
-        // Mensaje de WhatsApp
-        const mensajeWpp = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}.\n\nDescargá tu QR desde aquí y mostralo en puerta:\n${imgurLink}\n\n⚠️ Importante: descargá el QR antes de las 24 hs. El QR desaparecerá!`;
+        fondo.onload = async () => {
+          ctx.clearRect(0, 0, canvasFinal.width, canvasFinal.height);
+          ctx.drawImage(fondo, 0, 0, 899, 1274);
 
-        whatsappBtn.href = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensajeWpp)}`;
+          ctx.font = "900 50px Montserrat";
+          ctx.fillStyle = "white";
+          ctx.textAlign = "center";
+          ctx.fillText(nombre.toUpperCase(), 899 / 2, 432);
 
-        qrContainer.style.display = "block";
-      }
+          ctx.drawImage(qrImage, 151, 582, 596, 596);
+
+          const dataUrl = canvasFinal.toDataURL("image/png");
+          const blob = dataURLtoBlob(dataUrl);
+          const tempUrl = URL.createObjectURL(blob);
+          descargarQR.href = tempUrl;
+
+          // Subir a Imgur
+          const imgurLink = await subirAImgur(dataUrl);
+          if (!imgurLink) {
+            alert("No se pudo subir la imagen a Imgur.");
+            return;
+          }
+
+          const fechaFormateada = fecha.split("-").reverse().join("/");
+          const mensaje = `Hola! Esta es tu invitación para Condesa 👑\n\nConsta de "${beneficios}" para la noche del ${fechaFormateada}.\n\nDescargá tu QR desde aquí y mostralo en puerta:\n${imgurLink}\n\n⚠️ Importante: descargá el QR antes de las 24 hs. El QR desaparecerá!`;
+
+          whatsappBtn.href = `https://wa.me/54${telefono}?text=${encodeURIComponent(mensaje)}`;
+          qrContainer.style.display = "block";
+        };
+      };
     }, 500);
   });
 
   resetBtn.addEventListener("click", () => {
     formulario.reset();
     qrContainer.style.display = "none";
-    qrCodeDiv.innerHTML = "";
-    mensajeQR.textContent = "";
+    const ctx = canvasFinal.getContext("2d");
+    ctx.clearRect(0, 0, canvasFinal.width, canvasFinal.height);
   });
 
   function dataURLtoBlob(dataurl) {
@@ -88,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function subirAImgur(base64Image) {
-    const clientId = "4b1a3546c844fbd"; // 👈 REEMPLAZAR
+    const clientId = "4b1a3546c844fbd"; // Reemplazar por tu Client ID
     const response = await fetch("https://api.imgur.com/3/image", {
       method: "POST",
       headers: {
