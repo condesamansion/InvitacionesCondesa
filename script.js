@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
           ctx.font = "900 54px Montserrat";
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
-          ctx.fillText(nombre.toUpperCase(), 899 / 2, 532);
+          ctx.fillText(nombre.toUpperCase(), 899 / 2, 450);
 
           ctx.drawImage(qrImage, 151, 582, 596, 596);
 
