@@ -56,12 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
           ctx.clearRect(0, 0, canvasFinal.width, canvasFinal.height);
           ctx.drawImage(fondo, 0, 0, 899, 1274);
 
-          ctx.font = "900 50px Montserrat";
+          ctx.font = "900 54px Montserrat";
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
-          ctx.fillText(nombre.toUpperCase(), 899 / 2, 465);
+          ctx.fillText(nombre.toUpperCase(), 899 / 2, 470);
 
-          ctx.drawImage(qrImage, 151, 582, 596, 596);
+          ctx.drawImage(qrImage, 152, 557, 596, 596);
 
           const dataUrl = canvasFinal.toDataURL("image/jpg");
           const blob = dataURLtoBlob(dataUrl);
