@@ -44,13 +44,13 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(async () => {
       const qrCanvas = qrTempDiv.querySelector("canvas");
       const qrImage = new Image();
-      qrImage.src = qrCanvas.toDataURL("image/png");
+      qrImage.src = qrCanvas.toDataURL("image/jpg");
 
       qrImage.onload = async () => {
         const ctx = canvasFinal.getContext("2d");
 
         const fondo = new Image();
-        fondo.src = "img/fondo.png";
+        fondo.src = "img/fondo.jpg";
 
         fondo.onload = async () => {
           ctx.clearRect(0, 0, canvasFinal.width, canvasFinal.height);
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           ctx.drawImage(qrImage, 151, 582, 596, 596);
 
-          const dataUrl = canvasFinal.toDataURL("image/png");
+          const dataUrl = canvasFinal.toDataURL("image/jpg");
           const blob = dataURLtoBlob(dataUrl);
           const tempUrl = URL.createObjectURL(blob);
           descargarQR.href = tempUrl;
